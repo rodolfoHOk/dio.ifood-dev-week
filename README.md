@@ -24,6 +24,8 @@
 
 - Insomnia : API Client para testes (alternativa ao Postman)
 
+- SpringDoc / Swagger UI : Documentação Open API
+
 ## ➕ O que fiz além ✨
 
 - Uso do Flyway para migrações de banco de dados

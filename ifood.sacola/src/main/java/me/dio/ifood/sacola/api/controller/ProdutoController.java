@@ -19,6 +19,7 @@ import me.dio.ifood.sacola.api.assembler.ProdutoInputRequestDisassembler;
 import me.dio.ifood.sacola.api.assembler.ProdutoResponseAssembler;
 import me.dio.ifood.sacola.api.dto.request.ProdutoInputRequest;
 import me.dio.ifood.sacola.api.dto.response.ProdutoResponse;
+import me.dio.ifood.sacola.api.openapi.ProdutoControllerOpenApi;
 import me.dio.ifood.sacola.domain.exception.BadRequestException;
 import me.dio.ifood.sacola.domain.exception.ResourceNotFoundException;
 import me.dio.ifood.sacola.domain.irepository.ProdutoRepository;
@@ -28,23 +29,26 @@ import me.dio.ifood.sacola.domain.service.ProdutoRegistrationService;
 @RestController
 @RequestMapping("/api/v1/produtos")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ProdutoController {
+public class ProdutoController implements ProdutoControllerOpenApi {
 
 	private final ProdutoRepository repository;
 	private final ProdutoRegistrationService service;
 	
+	@Override
 	@GetMapping
 	public List<ProdutoResponse> getAll() {
 		List<Produto> entities = repository.findAll();
 		return ProdutoResponseAssembler.toCollectionModel(entities);
 	}
 	
+	@Override
 	@GetMapping("/{id}")
 	public ProdutoResponse getById(@PathVariable Long id) {
 		Produto entity = service.getById(id);
 		return ProdutoResponseAssembler.toModel(entity);
 	}
 	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoResponse create(@RequestBody ProdutoInputRequest requestBody) {
@@ -57,6 +61,7 @@ public class ProdutoController {
 		}
 	}
 	
+	@Override
 	@PutMapping("/{id}")
 	public ProdutoResponse update(@PathVariable Long id, @RequestBody ProdutoInputRequest requestBody) {
 		try {
@@ -69,6 +74,7 @@ public class ProdutoController {
 		}
 	}
 	
+	@Override
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {

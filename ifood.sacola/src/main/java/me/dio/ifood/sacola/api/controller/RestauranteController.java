@@ -21,6 +21,7 @@ import me.dio.ifood.sacola.api.assembler.RestauranteResponseAssembler;
 import me.dio.ifood.sacola.api.dto.request.RestauranteInputRequest;
 import me.dio.ifood.sacola.api.dto.response.ProdutoBasicResponse;
 import me.dio.ifood.sacola.api.dto.response.RestauranteResponse;
+import me.dio.ifood.sacola.api.openapi.RestauranteControllerOpenApi;
 import me.dio.ifood.sacola.domain.irepository.RestauranteRepository;
 import me.dio.ifood.sacola.domain.model.Produto;
 import me.dio.ifood.sacola.domain.model.Restaurante;
@@ -29,29 +30,33 @@ import me.dio.ifood.sacola.domain.service.RestauranteRegistrationService;
 @RestController
 @RequestMapping("/api/v1/restaurantes")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenApi {
 
 	private final RestauranteRepository repository;
 	private final RestauranteRegistrationService service;
 	
+	@Override
 	@GetMapping
 	public List<RestauranteResponse> getAll() {
 		List<Restaurante> entities = repository.findAll();
 		return RestauranteResponseAssembler.toCollectionModel(entities);
 	}
 	
+	@Override
 	@GetMapping("/{id}")
 	public RestauranteResponse getById(@PathVariable Long id) {
 		Restaurante entity = service.getById(id);
 		return RestauranteResponseAssembler.toModel(entity);
 	}
 	
+	@Override
 	@GetMapping("/{id}/produtos")
 	public List<ProdutoBasicResponse> getCardadio(@PathVariable Long id) {
 		List<Produto> produtos = service.getCardapio(id);
 		return ProdutoBasicResponseAssembler.toCollectionModel(produtos);
 	}
 	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RestauranteResponse create(@RequestBody RestauranteInputRequest requestBody) {
@@ -60,6 +65,7 @@ public class RestauranteController {
 		return RestauranteResponseAssembler.toModel(savedEntity);
 	}
 	
+	@Override
 	@PutMapping("/{id}")
 	public RestauranteResponse update(@PathVariable Long id, @RequestBody RestauranteInputRequest requestBody) {
 		Restaurante existingEntity = service.getById(id);
@@ -68,6 +74,7 @@ public class RestauranteController {
 		return RestauranteResponseAssembler.toModel(updatedEntity);
 	}
 	
+	@Override
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {

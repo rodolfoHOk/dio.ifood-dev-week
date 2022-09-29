@@ -22,6 +22,7 @@ import me.dio.ifood.sacola.api.dto.request.FormaPagamentoInputRequest;
 import me.dio.ifood.sacola.api.dto.request.ItemInputRequest;
 import me.dio.ifood.sacola.api.dto.request.SacolaInputRequest;
 import me.dio.ifood.sacola.api.dto.response.SacolaResponse;
+import me.dio.ifood.sacola.api.openapi.SacolaControllerOpenApi;
 import me.dio.ifood.sacola.domain.exception.BadRequestException;
 import me.dio.ifood.sacola.domain.exception.ResourceNotFoundException;
 import me.dio.ifood.sacola.domain.irepository.SacolaRepository;
@@ -32,23 +33,26 @@ import me.dio.ifood.sacola.domain.service.SacolaRegistrationService;
 @RestController
 @RequestMapping("/api/v1/sacolas")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class SacolaController {
+public class SacolaController implements SacolaControllerOpenApi {
 
 	private final SacolaRepository repository;
 	private final SacolaRegistrationService service;
 	
+	@Override
 	@GetMapping
 	public List<SacolaResponse>	getAll() {
 		List<Sacola> entities = repository.findAll();
 		return SacolaResponseAssembler.toCollectionModel(entities);
 	}
 	
+	@Override
 	@GetMapping("/{id}")
 	public SacolaResponse getbyId(@PathVariable Long id) {
 		Sacola entity = service.getById(id);
 		return SacolaResponseAssembler.toModel(entity);
 	}
 	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public SacolaResponse create(@RequestBody SacolaInputRequest requestBody) {
@@ -61,12 +65,14 @@ public class SacolaController {
 		}
 	}
 	
+	@Override
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
 		service.remove(id);
 	}
 	
+	@Override
 	@PatchMapping("/{id}/adiciona-item")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void addItem(@PathVariable Long id, @RequestBody ItemInputRequest requestBody) {
@@ -78,6 +84,7 @@ public class SacolaController {
 		}
 	}
 	
+	@Override
 	@DeleteMapping("/{id}/remove-item/{itemId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void removeItem(@PathVariable Long id, @PathVariable Long itemId) {
@@ -88,6 +95,7 @@ public class SacolaController {
 		}
 	}
 	
+	@Override
 	@PatchMapping("/{id}/forma-pagamento")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void setFormaPagamento(@PathVariable Long id, @RequestBody FormaPagamentoInputRequest requestBody) {
@@ -98,6 +106,7 @@ public class SacolaController {
 		}
 	}
 	
+	@Override
 	@PatchMapping("/{id}/fechamento")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void closeSacola(@PathVariable Long id) {

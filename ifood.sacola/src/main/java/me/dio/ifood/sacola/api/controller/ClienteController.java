@@ -19,6 +19,7 @@ import me.dio.ifood.sacola.api.assembler.ClienteInputRequestDisassembler;
 import me.dio.ifood.sacola.api.assembler.ClienteResponseAssembler;
 import me.dio.ifood.sacola.api.dto.request.ClienteInputRequest;
 import me.dio.ifood.sacola.api.dto.response.ClienteResponse;
+import me.dio.ifood.sacola.api.openapi.ClienteControllerOpenApi;
 import me.dio.ifood.sacola.domain.irepository.ClienteRepository;
 import me.dio.ifood.sacola.domain.model.Cliente;
 import me.dio.ifood.sacola.domain.service.ClienteRegistrationService;
@@ -26,23 +27,26 @@ import me.dio.ifood.sacola.domain.service.ClienteRegistrationService;
 @RestController
 @RequestMapping("/api/v1/clientes")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ClienteController {
+public class ClienteController implements ClienteControllerOpenApi {
 
 	private final ClienteRepository repository;
 	private final ClienteRegistrationService service;
 	
+	@Override
 	@GetMapping
 	public List<ClienteResponse> getAll() {
 		List<Cliente> entities = repository.findAll();
 		return ClienteResponseAssembler.toCollectionModel(entities);
 	}
 	
+	@Override
 	@GetMapping("/{id}")
 	public ClienteResponse getById(@PathVariable Long id) {
 		Cliente entity = service.getById(id);
 		return ClienteResponseAssembler.toModel(entity);
 	}
 	
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ClienteResponse create(@RequestBody ClienteInputRequest requestBody) {
@@ -51,6 +55,7 @@ public class ClienteController {
 		return ClienteResponseAssembler.toModel(savedEntity);
 	}
 	
+	@Override
 	@PutMapping("/{id}")
 	public ClienteResponse update(@PathVariable Long id, @RequestBody ClienteInputRequest requestBody) {
 		Cliente existingEntity = service.getById(id);
@@ -59,6 +64,7 @@ public class ClienteController {
 		return ClienteResponseAssembler.toModel(updatedEntity);
 	}
 	
+	@Override
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
