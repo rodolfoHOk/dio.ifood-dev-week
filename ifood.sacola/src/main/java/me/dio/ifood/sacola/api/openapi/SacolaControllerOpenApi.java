@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import me.dio.ifood.sacola.api.dto.request.FormaPagamentoInputRequest;
 import me.dio.ifood.sacola.api.dto.request.ItemInputRequest;
 import me.dio.ifood.sacola.api.dto.request.SacolaInputRequest;
+import me.dio.ifood.sacola.api.dto.response.ItemResponse;
 import me.dio.ifood.sacola.api.dto.response.SacolaResponse;
 
 @Tag(name = "Sacolas")
@@ -25,7 +26,7 @@ public interface SacolaControllerOpenApi {
 	void delete(Long id);
 
 	@Operation(summary = "Adiciona item a sacola")
-	void addItem(Long id, ItemInputRequest requestBody);
+	ItemResponse addItem(Long id, ItemInputRequest requestBody);
 
 	@Operation(summary = "Remove item da sacola")
 	void removeItem(Long id, Long itemId);
@@ -34,6 +35,6 @@ public interface SacolaControllerOpenApi {
 	void setFormaPagamento(Long id, FormaPagamentoInputRequest requestBody);
 
 	@Operation(summary = "Fecha a sacola")
-	void closeSacola(Long id);
+	SacolaResponse closeSacola(Long id);
 
 }

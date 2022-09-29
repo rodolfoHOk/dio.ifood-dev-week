@@ -33,7 +33,7 @@ public class ItemRegistrationService {
 //	}
 
 	@Transactional
-	public void remove(Long itemId) { // Remove pela SacolaRegistrationService | Sacola itensSacola cascade all
+	public void remove(Long itemId) {
 		try {
 			repository.deleteById(itemId);
 			repository.flush();

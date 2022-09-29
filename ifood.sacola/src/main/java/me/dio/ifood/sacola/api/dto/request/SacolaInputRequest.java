@@ -10,8 +10,6 @@ import lombok.Setter;
 @Setter
 public class SacolaInputRequest {
 
-private Long id;
-	
 	@Valid
 	@NotNull
 	private ClienteIdInputRequest cliente;

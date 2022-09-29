@@ -56,45 +56,44 @@ public class Sacola {
 	private OffsetDateTime dataFechamento;
 	
 	public void addItem(Item item) {
-		if (!this.fechada) {
-			this.itensSacola.add(item);
-			this.valorTotalSacola = valorTotalSacola
-					.add(new BigDecimal(item.getQuantidade())
-							.multiply(item.getProduto().getValorUnitario()));
-		} else {
+		if (this.fechada) {
 			throw new BusinessException("Sacola já foi fechada");
 		}
+		this.itensSacola.add(item);
+		this.valorTotalSacola = valorTotalSacola
+				.add(new BigDecimal(item.getQuantidade())
+						.multiply(item.getProduto().getValorUnitario()));
 	}
 	
 	public void removeItem(Item item) {
-		if (!this.fechada) {
-			this.itensSacola.remove(item);
-			this.valorTotalSacola = valorTotalSacola
-					.subtract(new BigDecimal(item.getQuantidade())
-							.multiply(item.getProduto().getValorUnitario()));
-		} else {
+		if (this.fechada) {
 			throw new BusinessException("Sacola já foi fechada");
 		}
+		this.itensSacola.remove(item);
+		this.valorTotalSacola = valorTotalSacola
+				.subtract(new BigDecimal(item.getQuantidade())
+						.multiply(item.getProduto().getValorUnitario()));	
 	}
 	
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
-		if (!this.fechada) {
-			this.formaPagamento = formaPagamento;
-		} else {
+		if (this.fechada) {
 			throw new BusinessException("Sacola já foi fechada");
 		}
+		this.formaPagamento = formaPagamento;
 	}
 	
 	public void closeSacola() {
-		if (!this.fechada) {
-			if (formaPagamento.equals(FormaPagamento.INDEFINIDO)) {
-				throw new BusinessException("Forma de pagamento não foi definida");
-			}
-			this.dataFechamento = OffsetDateTime.now();
-			this.fechada = true;
-		} else {
+		if (this.fechada) {
 			throw new BusinessException("Sacola já foi fechada");
 		}
+		if (this.itensSacola.isEmpty()) {
+			throw new BusinessException("Sacola não pode ser fechada, pois não há items");
+		}
+		if (formaPagamento.equals(FormaPagamento.INDEFINIDO)) {
+			throw new BusinessException("Forma de pagamento não foi definida");
+		}
+		this.dataFechamento = OffsetDateTime.now();
+		this.fechada = true;
 	}
 	
 }

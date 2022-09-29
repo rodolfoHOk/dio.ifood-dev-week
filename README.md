@@ -24,17 +24,21 @@
 
 - Insomnia : API Client para testes (alternativa ao Postman)
 
-- SpringDoc / Swagger UI : Documentação Open API
+- SpringDoc / Swagger UI : Documentação Open API (alternativa ao SpringFox)
 
 ## ➕ O que fiz além ✨
 
 - Codei todo o projeto da minha maneira com base no diagrama de classes apresentado na aula 2 (vide material de apoio dia 2 página 9)
 
-- Uso do Flyway para migrações de banco de dados
+- Usei o Flyway para migrações de banco de dados
 
-- Uso do PostgreSQL como banco de dados
+- Usei o PostgreSQL como banco de dados
 
-- Validação das entradas de dados (input request dto)
+- Implementei endpoints de CRUD para clientes, restaurantes, produtos e sacolas
+
+- Implementei validações para as entradas de dados (todos os inputs request dto)
+
+- Implementei exceções customizadas e os tratei no exception handler da API
 
 - Uso do Docker
 

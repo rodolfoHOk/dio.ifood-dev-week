@@ -15,6 +15,7 @@ import me.dio.ifood.sacola.domain.irepository.SacolaRepository;
 import me.dio.ifood.sacola.domain.model.Cliente;
 import me.dio.ifood.sacola.domain.model.Item;
 import me.dio.ifood.sacola.domain.model.Produto;
+import me.dio.ifood.sacola.domain.model.Restaurante;
 import me.dio.ifood.sacola.domain.model.Sacola;
 
 @Service
@@ -51,12 +52,24 @@ public class SacolaRegistrationService {
 	}
 	
 	@Transactional
-	public void addItem(Long sacolaId, Item item) {
+	public Item addItem(Long sacolaId, Item item) {
 		Produto produto = produtoRegistrationService.getById(item.getProduto().getId());
 		item.setProduto(produto);
 		Sacola sacola = getById(sacolaId);
 		item.setSacola(sacola);
-		sacola.addItem(item);
+		if (sacola.getItensSacola().isEmpty()) {
+			sacola.addItem(item);
+			return item;
+		} else {
+			Restaurante restauranteItemExistente = sacola.getItensSacola().get(0).getProduto().getRestaurante();
+			Restaurante restauranteNovoItem = item.getProduto().getRestaurante();
+			if (restauranteItemExistente.equals(restauranteNovoItem)) {
+				sacola.addItem(item);
+				return item;
+			} else {
+				throw new BusinessException("Não é possível adicionar a sacola produtos de restaurantes diferentes. Feche a sacola ou esvazie.");
+			}
+		}
 	}
 	
 	@Transactional
@@ -69,8 +82,8 @@ public class SacolaRegistrationService {
 	
 	@Transactional
 	public void setFormaPagamento(Long sacolaId, String formaPagamentoString) {
-		Sacola sacola = getById(sacolaId);
 		try {
+			Sacola sacola = getById(sacolaId);
 			FormaPagamento formaPagamento = FormaPagamento.valueOf(formaPagamentoString);
 			sacola.setFormaPagamento(formaPagamento);
 		} catch (IllegalArgumentException ex) {
@@ -79,9 +92,10 @@ public class SacolaRegistrationService {
 	}
 	
 	@Transactional
-	public void closeSacola(Long sacolaId) {
+	public Sacola closeSacola(Long sacolaId) {
 		Sacola sacola = getById(sacolaId);
 		sacola.closeSacola();
+		return sacola;
 	}
 	
 }

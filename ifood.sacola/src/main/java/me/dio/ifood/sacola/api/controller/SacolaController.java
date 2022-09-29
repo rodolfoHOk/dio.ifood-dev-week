@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.dio.ifood.sacola.api.assembler.ItemInputRequestDisassembler;
+import me.dio.ifood.sacola.api.assembler.ItemResponseAssembler;
 import me.dio.ifood.sacola.api.assembler.SacolaInputRequestDisassembler;
 import me.dio.ifood.sacola.api.assembler.SacolaResponseAssembler;
 import me.dio.ifood.sacola.api.dto.request.FormaPagamentoInputRequest;
 import me.dio.ifood.sacola.api.dto.request.ItemInputRequest;
 import me.dio.ifood.sacola.api.dto.request.SacolaInputRequest;
+import me.dio.ifood.sacola.api.dto.response.ItemResponse;
 import me.dio.ifood.sacola.api.dto.response.SacolaResponse;
 import me.dio.ifood.sacola.api.openapi.SacolaControllerOpenApi;
 import me.dio.ifood.sacola.domain.exception.BadRequestException;
@@ -74,11 +76,11 @@ public class SacolaController implements SacolaControllerOpenApi {
 	
 	@Override
 	@PatchMapping("/{id}/adiciona-item")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void addItem(@PathVariable Long id, @RequestBody ItemInputRequest requestBody) {
-		Item item = ItemInputRequestDisassembler.toEntity(requestBody);
+	public ItemResponse addItem(@PathVariable Long id, @RequestBody ItemInputRequest requestBody) {
 		try {
-			service.addItem(id, item);
+			Item item = ItemInputRequestDisassembler.toEntity(requestBody);
+			Item savedItem = service.addItem(id, item);
+			return ItemResponseAssembler.toModel(savedItem);
 		} catch (ResourceNotFoundException ex) {
 			throw new BadRequestException(ex.getMessage());
 		}
@@ -108,10 +110,10 @@ public class SacolaController implements SacolaControllerOpenApi {
 	
 	@Override
 	@PatchMapping("/{id}/fechamento")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void closeSacola(@PathVariable Long id) {
+	public SacolaResponse closeSacola(@PathVariable Long id) {
 		try {
-			service.closeSacola(id);
+			Sacola sacola = service.closeSacola(id);
+			return SacolaResponseAssembler.toModel(sacola);
 		} catch (ResourceNotFoundException ex) {
 			throw new BadRequestException(ex.getMessage());
 		}
