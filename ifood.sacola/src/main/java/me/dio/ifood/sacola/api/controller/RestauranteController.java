@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,8 +38,13 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	
 	@Override
 	@GetMapping
-	public List<RestauranteResponse> getAll() {
-		List<Restaurante> entities = repository.findAll();
+	public List<RestauranteResponse> search(@RequestParam(required = false) String nome) {
+		List<Restaurante> entities;
+		if (nome == null) {
+			entities = repository.findAll();
+		} else {
+			entities = repository.findByNomeContainingIgnoreCase(nome);
+		}
 		return RestauranteResponseAssembler.toCollectionModel(entities);
 	}
 	

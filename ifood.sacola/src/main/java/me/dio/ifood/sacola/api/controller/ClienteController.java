@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,8 +35,13 @@ public class ClienteController implements ClienteControllerOpenApi {
 	
 	@Override
 	@GetMapping
-	public List<ClienteResponse> getAll() {
-		List<Cliente> entities = repository.findAll();
+	public List<ClienteResponse> search(@RequestParam(required = false) String nome) {
+		List<Cliente> entities;
+		if (nome == null) {
+			entities = repository.findAll();
+		} else {
+			entities = repository.findByNomeContainingIgnoreCase(nome);
+		}
 		return ClienteResponseAssembler.toCollectionModel(entities);
 	}
 	

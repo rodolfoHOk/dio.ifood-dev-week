@@ -9,9 +9,9 @@ import me.dio.ifood.sacola.api.dto.response.ClienteResponse;
 
 @Tag(name = "Clientes")
 public interface ClienteControllerOpenApi {
-
-	@Operation(summary = "Lista os clientes")
-	List<ClienteResponse> getAll();
+	
+	@Operation(summary = "Pesquisa clientes (nome)")
+	List<ClienteResponse> search(String nome);
 
 	@Operation(summary = "Busca cliente por ID")
 	ClienteResponse getById(Long id);

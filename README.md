@@ -40,6 +40,14 @@
 
 - Implementei exceções customizadas e os tratei no exception handler da API
 
+- Adicionei endpoint de pesquisa de clientes: todos / por nome
+
+- Adicionei endpoint de pesquisa de restaurantes: todos / por nome
+
+- Adicionei endpoint de pesquisa de produtos: todos / por nome / por nome e restaurante id
+
+- Adicionei endpoint de busca de sacolas pelo id do cliente
+
 - Coloquei descrições para cada endpoint na documentação
 
 - Usei o PostgreSQL como banco de dados

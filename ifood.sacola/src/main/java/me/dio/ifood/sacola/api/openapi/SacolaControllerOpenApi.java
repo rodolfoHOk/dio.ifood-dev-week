@@ -18,6 +18,9 @@ public interface SacolaControllerOpenApi {
 
 	@Operation(summary = "Busca sacola por ID")
 	SacolaResponse getbyId(Long id);
+	
+	@Operation(summary = "Busca sacolas pelo cliente ID")
+	List<SacolaResponse> getbyClienteId(Long clienteId);
 
 	@Operation(summary = "Cadastra nova sacola")
 	SacolaResponse create(SacolaInputRequest requestBody);

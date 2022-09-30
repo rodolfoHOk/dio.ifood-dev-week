@@ -10,9 +10,9 @@ import me.dio.ifood.sacola.api.dto.response.RestauranteResponse;
 
 @Tag(name = "Restaurantes")
 public interface RestauranteControllerOpenApi {
-
-	@Operation(summary = "Lista os restaurantes")
-	List<RestauranteResponse> getAll();
+	
+	@Operation(summary = "Pesquisa restaurantes (nome)")
+	List<RestauranteResponse> search(String nome);	
 
 	@Operation(summary = "Busca restaurante por ID")
 	RestauranteResponse getById(Long id);

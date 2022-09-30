@@ -48,6 +48,13 @@ public class SacolaController implements SacolaControllerOpenApi {
 	}
 	
 	@Override
+	@GetMapping("/cliente/{clienteId}")
+	public List<SacolaResponse> getbyClienteId(@PathVariable Long clienteId) {
+		List<Sacola> entities = repository.findByClienteId(clienteId);
+		return SacolaResponseAssembler.toCollectionModel(entities);
+	}
+	
+	@Override
 	@GetMapping("/{id}")
 	public SacolaResponse getbyId(@PathVariable Long id) {
 		Sacola entity = service.getById(id);

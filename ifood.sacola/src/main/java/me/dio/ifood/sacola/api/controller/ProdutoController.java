@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,8 +37,16 @@ public class ProdutoController implements ProdutoControllerOpenApi {
 	
 	@Override
 	@GetMapping
-	public List<ProdutoResponse> getAll() {
-		List<Produto> entities = repository.findAll();
+	public List<ProdutoResponse> search(@RequestParam(required = false) String nome,
+			@RequestParam(required = false) Long restauranteId) {
+		List<Produto> entities;
+		if (nome == null && restauranteId == null) {
+			entities = repository.findAll();
+		} else if (nome != null && restauranteId == null) {
+			entities = repository.findByNomeContainingIgnoreCase(nome);
+		} else {
+			entities = repository.findByNomeContainingIgnoreCaseAndRestauranteId(nome, restauranteId);
+		}
 		return ProdutoResponseAssembler.toCollectionModel(entities);
 	}
 	

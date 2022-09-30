@@ -9,9 +9,9 @@ import me.dio.ifood.sacola.api.dto.response.ProdutoResponse;
 
 @Tag(name = "Produtos")
 public interface ProdutoControllerOpenApi {
-
-	@Operation(summary = "Lista os produtos")
-	List<ProdutoResponse> getAll();
+	
+	@Operation(summary = "Pesquisa produtos (nome & restauranteId)")
+	List<ProdutoResponse> search(String nome, Long restauranteId);
 
 	@Operation(summary = "Busca produto por ID")
 	ProdutoResponse getById(Long id);
