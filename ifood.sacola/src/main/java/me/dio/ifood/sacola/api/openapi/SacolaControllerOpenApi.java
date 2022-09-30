@@ -1,8 +1,11 @@
 package me.dio.ifood.sacola.api.openapi;
 
-import java.util.List;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.dio.ifood.sacola.api.dto.request.FormaPagamentoInputRequest;
 import me.dio.ifood.sacola.api.dto.request.ItemInputRequest;
@@ -13,14 +16,16 @@ import me.dio.ifood.sacola.api.dto.response.SacolaResponse;
 @Tag(name = "Sacolas")
 public interface SacolaControllerOpenApi {
 
+	@PageableAsQueryParam
 	@Operation(summary = "Lista as sacolas")
-	List<SacolaResponse> getAll();
+	Page<SacolaResponse> getAll(@Parameter(hidden = true) Pageable pageable);
 
 	@Operation(summary = "Busca sacola por ID")
 	SacolaResponse getbyId(Long id);
 	
+	@PageableAsQueryParam
 	@Operation(summary = "Busca sacolas pelo cliente ID")
-	List<SacolaResponse> getbyClienteId(Long clienteId);
+	Page<SacolaResponse> getbyClienteId(Long clienteId, @Parameter(hidden = true) Pageable pageable);
 
 	@Operation(summary = "Cadastra nova sacola")
 	SacolaResponse create(SacolaInputRequest requestBody);

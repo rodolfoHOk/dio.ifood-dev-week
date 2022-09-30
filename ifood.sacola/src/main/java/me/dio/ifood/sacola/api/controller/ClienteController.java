@@ -3,6 +3,10 @@ package me.dio.ifood.sacola.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,14 +39,16 @@ public class ClienteController implements ClienteControllerOpenApi {
 	
 	@Override
 	@GetMapping
-	public List<ClienteResponse> search(@RequestParam(required = false) String nome) {
-		List<Cliente> entities;
+	public Page<ClienteResponse> search(@RequestParam(required = false) String nome, @PageableDefault(size = 10) Pageable pageable) {
+		Page<Cliente> entitiesPage;
 		if (nome == null) {
-			entities = repository.findAll();
+			entitiesPage = repository.findAll(pageable);
 		} else {
-			entities = repository.findByNomeContainingIgnoreCase(nome);
+			entitiesPage = repository.findByNomeContainingIgnoreCase(nome, pageable);
 		}
-		return ClienteResponseAssembler.toCollectionModel(entities);
+		List<ClienteResponse> responseContent = ClienteResponseAssembler.toCollectionModel(entitiesPage.getContent());
+		Page<ClienteResponse> responsesPage = new PageImpl<>(responseContent, pageable, entitiesPage.getTotalElements());
+		return responsesPage;
 	}
 	
 	@Override

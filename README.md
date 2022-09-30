@@ -16,7 +16,7 @@
 	- Flyway
 	- Lombok
 	
-- REST : Arquitetura da API 
+- REST : Arquitetura da API
 	
 - PostgreSQL : Banco de dados
 
@@ -40,13 +40,15 @@
 
 - Implementei exceções customizadas e os tratei no exception handler da API
 
-- Adicionei endpoint de pesquisa de clientes: todos / por nome
+- Adicionei endpoint de pesquisa de clientes com paginação: todos / por nome
 
-- Adicionei endpoint de pesquisa de restaurantes: todos / por nome
+- Adicionei endpoint de pesquisa de restaurantes com paginação: todos / por nome
 
-- Adicionei endpoint de pesquisa de produtos: todos / por nome / por nome e restaurante id
+- Adicionei endpoint de pesquisa de produtos com paginação: todos / por nome / por nome e restaurante id
 
-- Adicionei endpoint de busca de sacolas pelo id do cliente
+- Adicionei endpoint de busca de sacolas pelo id do cliente com paginação
+
+- Adicionei paginação no endpoint de listar sacolas
 
 - Coloquei descrições para cada endpoint na documentação
 

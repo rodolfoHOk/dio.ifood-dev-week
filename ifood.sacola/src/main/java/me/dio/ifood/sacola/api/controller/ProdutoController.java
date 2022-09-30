@@ -3,6 +3,10 @@ package me.dio.ifood.sacola.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,17 +41,19 @@ public class ProdutoController implements ProdutoControllerOpenApi {
 	
 	@Override
 	@GetMapping
-	public List<ProdutoResponse> search(@RequestParam(required = false) String nome,
-			@RequestParam(required = false) Long restauranteId) {
-		List<Produto> entities;
+	public Page<ProdutoResponse> search(@RequestParam(required = false) String nome,
+			@RequestParam(required = false) Long restauranteId, @PageableDefault(size = 10) Pageable pageable) {
+		Page<Produto> entitiesPage;
 		if (nome == null && restauranteId == null) {
-			entities = repository.findAll();
+			entitiesPage = repository.findAll(pageable);
 		} else if (nome != null && restauranteId == null) {
-			entities = repository.findByNomeContainingIgnoreCase(nome);
+			entitiesPage = repository.findByNomeContainingIgnoreCase(nome, pageable);
 		} else {
-			entities = repository.findByNomeContainingIgnoreCaseAndRestauranteId(nome, restauranteId);
+			entitiesPage = repository.findByNomeContainingIgnoreCaseAndRestauranteId(nome, restauranteId, pageable);
 		}
-		return ProdutoResponseAssembler.toCollectionModel(entities);
+		List<ProdutoResponse> responseContent = ProdutoResponseAssembler.toCollectionModel(entitiesPage.getContent());
+		Page<ProdutoResponse> responsePage = new PageImpl<>(responseContent, pageable, entitiesPage.getTotalElements());
+		return responsePage;
 	}
 	
 	@Override

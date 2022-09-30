@@ -2,7 +2,12 @@
 
 import java.util.List;
 
+import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.dio.ifood.sacola.api.dto.request.RestauranteInputRequest;
 import me.dio.ifood.sacola.api.dto.response.ProdutoBasicResponse;
@@ -12,7 +17,8 @@ import me.dio.ifood.sacola.api.dto.response.RestauranteResponse;
 public interface RestauranteControllerOpenApi {
 	
 	@Operation(summary = "Pesquisa restaurantes (nome)")
-	List<RestauranteResponse> search(String nome);	
+	@PageableAsQueryParam
+	Page<RestauranteResponse> search(String nome, @Parameter(hidden = true) Pageable pageagle);
 
 	@Operation(summary = "Busca restaurante por ID")
 	RestauranteResponse getById(Long id);

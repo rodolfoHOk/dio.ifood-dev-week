@@ -19,8 +19,8 @@ public class SpringDocConfig {
 						.title("Sacola ifood Dev Week - DIO")
 						.version("v1")
 						.description("REST API Sacola ifood Dev Week da DIO")
-				
-				).tags(Arrays.asList(
+				)
+				.tags(Arrays.asList(
 						new Tag().name("Clientes").description("Gerencia os clientes"),
 						new Tag().name("Restaurantes").description("Gerencia os restaurantes"),
 						new Tag().name("Produtos").description("Gerencia os produtos"),

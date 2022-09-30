@@ -3,6 +3,10 @@ package me.dio.ifood.sacola.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,14 +42,17 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	
 	@Override
 	@GetMapping
-	public List<RestauranteResponse> search(@RequestParam(required = false) String nome) {
-		List<Restaurante> entities;
+	public Page<RestauranteResponse> search(@RequestParam(required = false) String nome, 
+			@PageableDefault(size = 10) Pageable pageagle) {
+		Page<Restaurante> entitiesPage;
 		if (nome == null) {
-			entities = repository.findAll();
+			entitiesPage = repository.findAll(pageagle);
 		} else {
-			entities = repository.findByNomeContainingIgnoreCase(nome);
+			entitiesPage = repository.findByNomeContainingIgnoreCase(nome, pageagle);
 		}
-		return RestauranteResponseAssembler.toCollectionModel(entities);
+		List<RestauranteResponse> responseContent = RestauranteResponseAssembler.toCollectionModel(entitiesPage.getContent());
+		Page<RestauranteResponse> responsePage = new PageImpl<>(responseContent, pageagle, entitiesPage.getTotalElements());
+		return responsePage;
 	}
 	
 	@Override
